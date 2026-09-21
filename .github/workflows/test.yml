@@ -1,0 +1,22 @@
+name: Test formula
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  install:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Homebrew/actions/setup-homebrew@master
+      - name: Install from this checkout
+        run: |
+          brew tap ur-grue/tap "$PWD"
+          brew install --verbose ur-grue/tap/moveon
+      - run: brew test ur-grue/tap/moveon
+      - run: moveon --version
