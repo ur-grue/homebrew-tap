@@ -8,15 +8,14 @@ on:
 jobs:
   install:
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      # setup-homebrew taps this checkout as ur-grue/tap automatically
       - uses: Homebrew/actions/setup-homebrew@main
-      - name: Install from this checkout
-        run: |
-          brew tap ur-grue/tap "$PWD"
-          brew install --verbose ur-grue/tap/moveon
+      - run: brew install --verbose ur-grue/tap/moveon
       - run: brew test ur-grue/tap/moveon
       - run: moveon --version
